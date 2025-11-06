@@ -1,42 +1,188 @@
-/* APPLIES TO EVERY PAGES */
-*{
+* {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
-/* FOR NAVBAR */
-.navbar{
-    background-color: rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(10px);
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  color: white;
+  background: transparent;
 }
 
-.navbar ul{
-    width: 100%;
-    list-style: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+/* Background Video */
+#bg-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
 }
 
-.navbar li{
-    background-color: #0f0f10;
-    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
-    border: 1px solid #b6a589;
-    border-radius: 25px;
-    height: 30px;
-    margin: 5px;
+#bg-video {
+  will-change: transform;
 }
 
-.navbar a{
-    height: 100%;
-    padding: 0 20px;
-    text-decoration: none;
-    color: #fcbe56;
-    display: flex;
-    align-items: center;
-    border-radius: 25px;
+
+/* Header in Nav*/
+header {
+  background: rgba(0, 0, 0, 0.55);
+  padding: 15px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
-.navbar a:hover{
-    background-color: rgba(255, 255, 255, 0.15);
+.logo {
+  color: white;
+  font-size: 1.7em;
+  font-weight: bold;
+}
+
+.logo span {
+  color: #00bfff;
+}
+
+nav a {
+  text-decoration: none;
+  color: white;
+  padding: 15px 25px;
+  font-size: 1.1em;
+  border: 2px solid #00bfff;
+  border-radius: 10px;
+  transition: 0.3s ease;
+  font-weight: 500;
+}
+
+nav a:hover {
+  background: #00bfff;
+  color: black;
+  box-shadow: 0 0 12px #00bfff;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+nav ul {
+  margin-left: auto;
+  display: flex;
+  gap: 15px;
+}
+
+.section {
+  padding: 50px 20px;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  border-radius: 6px;
+  margin: 20px;
+}
+
+/* Members Page */
+.section.contact {
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.members {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+  padding: 20px;
+  max-height: none;
+  overflow: visible;
+}
+
+
+.member-card {
+  background-color: rgba(30, 30, 30, 0.7);
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(255,255,255,0.15);
+  width: 220px;
+  padding: 15px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  backdrop-filter: blur(6px);
+}
+
+.member-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 20px rgba(255,255,255,0.35);
+}
+
+.member-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.member-card h3 {
+  margin: 10px 0;
+  font-size: 1.2em;
+}
+
+/* Links of contacts*/
+.links a {
+  display: inline-block;
+  margin: 5px;
+  color: #00bfff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.links a:hover {
+  color: white;
+}
+
+
+/* works */
+.work-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 25px;
+}
+
+.work-btn {
+  width: 180px;
+  height: 130px;
+  background: rgba(0, 0, 0, 0.55);
+  border: 2.5px solid #00bfff;
+  border-radius: 12px;
+  color: white;
+  font-size: 1.3em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.35s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.work-btn:hover {
+  background: #00bfff;
+  color: black;
+  box-shadow: 0 0 25px #00bfff;
+  transform: translateY(-6px) scale(1.05);
+}
+
+a {
+  text-decoration: none;
+}
+
+#works-page h1 {
+  text-align: center;
+  font-size: 2.2em;
+  font-weight: 700;
+  margin-bottom: 30px;
+  color: white;
 }
