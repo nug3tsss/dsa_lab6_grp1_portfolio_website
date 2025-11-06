@@ -1,7 +1,21 @@
-{% extends "_base.html" %}
-
-{% block title %}Contacts{% endblock %}
+{% extends "base.html" %}
+{% block title %}Members & Contact{% endblock %}
 
 {% block content %}
-<p>CONTACTS PAGE</p>
+<section class="section contact">
+  <h2>GROUP 11 MEMBERS</h2>
+  <div class="members">
+    {% for person in people %}
+    <div class="member-card">
+      <img src="{{ person.image }}" alt="{{ person.name }}">
+      <h3>{{ person.name }}</h3>
+      <div class="links">
+        {% for site, link in person.links.items() %}
+          <a href="{{ link }}" target="_blank">{{ site|capitalize }}</a>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
 {% endblock %}
