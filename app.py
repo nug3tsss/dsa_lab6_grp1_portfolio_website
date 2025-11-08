@@ -91,11 +91,11 @@ def members_contact():
     {
         
             "name": "Gian Carlos Tumanan",
-            "image": "static/images/members/pic_6.png",
+            "image": "static/images/members/GIAN.png",
             "links": {
-                "facebook": "https://facebook.com/zybanezz",#need update
-                "email": "https://youtube.com/@zybanezz",#need update
-                "github": "https://tiktok.com/@zybanezz",#need update
+                "facebook": "https://facebook.com/giancarlos.tumanan",
+                "email": "mailto:giancarlostumanan@gmail.com",
+                "github": "https://github.com/GIANT0808",
         }
     }
     ]
