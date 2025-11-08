@@ -83,9 +83,9 @@ def members_contact():
             "name": "Isaac Christian Pelingen",
             "image": "static/images/members/pic_5.png",
             "links": {
-                "facebook": "https://facebook.com/zybanezz",#need update
-                "email": "https://youtube.com/@zybanezz",#need update
-                "github": "https://tiktok.com/@zybanezz",#need update
+                "facebook": "https://www.facebook.com/share/1FmtJqYkC4/",
+                "email": "Mail to: pelingenisaac@gmail.com",
+                "github": "https://github.com/xiin112",
         }
     }, 
     {
