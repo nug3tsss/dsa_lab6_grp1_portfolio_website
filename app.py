@@ -63,9 +63,9 @@ def members_contact():
             "name": "John Luke Fabillan",
             "image": "static/images/members/pic_3.png",
             "links": {
-                "facebook": "https://facebook.com/zybanezz",#need update
-                "email": "https://youtube.com/@zybanezz",#need update
-                "github": "https://tiktok.com/@zybanezz",#need update
+                "facebook": "https://facebook.com/johnluke.fabillan",
+                "email": "mailto:jlfabillan@gmail.com",
+                "github": "https://github.com/JLFabillan",
         }
     }, 
     {
