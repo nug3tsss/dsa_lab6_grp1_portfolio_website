@@ -61,7 +61,7 @@ def members_contact():
     {
         
             "name": "John Luke Fabillan",
-            "image": "static/images/members/pic_3.png",
+            "image": "static/images/members/jl.jpg",
             "links": {
                 "facebook": "https://facebook.com/johnluke.fabillan",
                 "email": "mailto:jlfabillan@gmail.com",
