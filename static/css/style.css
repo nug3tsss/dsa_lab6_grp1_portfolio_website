@@ -6,7 +6,7 @@
 
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
+  font-family: "JetBrainsMono Nerd Font", monospace;
   color: white;
   background: transparent;
 }
@@ -80,10 +80,9 @@ nav ul {
 .section {
   padding: 50px 20px;
   text-align: center;
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(4px);
-  border-radius: 6px;
-  margin: 20px;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(3px);
+  margin: 10px;
 }
 
 /* Members Page */
@@ -179,6 +178,7 @@ nav ul {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 5px;
 }
 
 .work-btn:hover {
