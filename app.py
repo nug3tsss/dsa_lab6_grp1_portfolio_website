@@ -3,12 +3,14 @@ import os
 from modules.queue import Queue
 from modules.dequeue import DeQueue
 from modules.binary_tree import BinaryTree
+from modules.binary_search_tree import BinarySearchTree, Node
 
 app = Flask(__name__)
 
 queue_structure = Queue()
 deque_structure = DeQueue()
 binary_tree = BinaryTree()
+bst = BinarySearchTree()
 
 @app.route('/')
 def home_redirect():
@@ -180,6 +182,107 @@ def binary_tree_visualizer():
         "binarytreevisualizer.html",
         tree_nodes=tree_nodes,
         tree_root=binary_tree.root,
+        active_page="works"
+    )
+
+# Binary Search Tree Visualizer
+@app.route('/works/bst-visualizer', methods=['GET', 'POST'])
+def bst_visualizer():
+    global bst
+    output = ""
+    search_value = None
+    max_value = None
+    height_value = None
+    height_path = []
+
+
+    if request.method == "POST":
+        value = request.form.get("value")
+        try:
+            value = int(value) if value else None
+        except ValueError:
+            value = None
+
+        # INSERT
+        if "insert" in request.form and value is not None:
+            bst.insert(value)
+            output = f"Inserted {value}."
+
+        # SEARCH
+        elif "search" in request.form and value is not None:
+            node = bst.search(bst.root, value)
+            if node:
+                output = f"Value {value} found in the tree."
+                search_value = value
+            else:
+                output = f"Value {value} not found."
+
+        # DELETE
+        elif "delete" in request.form and value is not None:
+            bst.root = bst.delete(bst.root, value)
+            output = f"Deleted {value} (if it existed)."
+
+        # GET MAX
+        elif "max" in request.form:
+            max_val = bst.get_max_value(bst.root)
+            output = f"Max value in tree: {max_val}" if max_val is not None else "Tree is empty."
+            max_value = max_val
+
+        # GET HEIGHT
+        elif "height" in request.form:
+            try:
+                value = int(value)
+            except:
+                value = None
+
+            if value is not None:
+                height, path = bst.get_height_with_path(value)
+
+                if height is None:
+                    output = f"Node {value} not found."
+                    height_value = None
+                    height_path = []
+                else:
+                    output = f"Height of node {value}: {height}"
+                    height_value = height
+                    height_path = path
+            else:
+                output = "Please enter a valid number."
+                height_value = None
+                height_path = []
+
+
+        # RESET
+        elif "reset" in request.form:
+            bst = BinarySearchTree()
+            output = "Tree has been reset."
+
+    # Serialize the tree for frontend visualizer
+    tree_nodes = []
+    if bst.root:
+        # Flatten the tree to a list of dicts for your HTML
+        def serialize(node, index=0, level=0, parent=None):
+            if node is None:
+                return []
+            data = [{
+                "value": node.value,
+                "index": index,
+                "level": level,
+                "parent": parent
+            }]
+            data += serialize(node.left, index*2+1, level+1, index)
+            data += serialize(node.right, index*2+2, level+1, index)
+            return data
+        tree_nodes = serialize(bst.root)
+
+    return render_template(
+        "binarysearchtreevisualizer.html",
+        output=output,
+        tree_nodes=tree_nodes,
+        search_value=search_value,
+        max_value=max_value,
+        height_value=height_value,
+        height_path=height_path,
         active_page="works"
     )
 

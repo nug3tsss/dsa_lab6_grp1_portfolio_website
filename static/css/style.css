@@ -387,3 +387,35 @@ a {
     margin-bottom: 18px;
     font-weight: 500;
 }
+
+  .tree-node-abs {
+      position: absolute;
+      width: 60px;
+      height: 40px;
+      display: flex;
+      justify-content: center; /* horizontal centering */
+      align-items: center;     /* vertical centering */
+      border-radius: 12px;
+      background-color: #00e6ff33;
+      font-weight: bold;
+      border: 2px solid rgba(0,230,255,0.8);
+      box-shadow: 0 0 28px rgba(0,230,255,0.5);
+  }
+
+  .branch-line {
+      stroke: rgba(205, 255, 248, 0.725);
+      stroke-width: 3;
+      fill: none;
+  }
+
+  .highlight-edge {
+    stroke: #ffdf00;      /* bright yellow */
+    stroke-width: 4;
+    filter: drop-shadow(0 0 4px #ffdf00);
+}
+
+  .found-node {
+      background-color: #00e6ff33;
+      border-color: #00ff4c;
+      box-shadow: 0 0 28px #00ff08b3;
+  }

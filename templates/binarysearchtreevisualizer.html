@@ -1,0 +1,171 @@
+{% extends "_base.html" %}
+{% block title %}Works - Binary Search Tree Visualizer{% endblock %}
+
+{% block content %}
+
+<div class="queue-wrapper">
+    <h2>Binary Search Tree</h2>
+    <p class="page-description">
+        A specialized binary tree where each left subtree contains smaller values and each right subtree contains larger values.
+    </p>
+
+    <!-- FORM -->
+    <form method="POST" class="queue-form" action="/works/bst-visualizer">
+        <div class="input-container" style="gap: 12px;">
+            <input type="number" name="value" placeholder="Enter value (if needed)">
+        </div>
+
+        <div class="button-container">
+            <button type="submit" name="insert" class="btn-glow">Insert</button>
+            <button type="submit" name="search" class="btn-glow">Search</button>
+            <button type="submit" name="delete" class="btn-glow">Delete</button>
+            <button type="submit" name="max" class="btn-glow">Get Max</button>
+            <button type="submit" name="height" class="btn-glow">Get Height</button>
+            <button type="submit" name="reset" class="btn-glow">Reset Tree</button>
+        </div>
+    </form>
+
+    <!-- OUTPUT -->
+    {% if output %}
+    <div class="queue-display">
+        <div class="empty-msg" style="margin-bottom: 10px;">
+            {{ output }}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- TREE DISPLAY -->
+    <div class="queue-display">
+        {% if tree_nodes|length == 0 %}
+            <div class="empty-msg">Tree is empty</div>
+        {% else %}
+            <div id="treeStage" class="tree-wrapper" style="position:relative; min-width:700px; height:400px;">
+                <svg id="treeSvg" style="position:absolute; left:0; top:0; width:100%; height:100%; overflow:visible;"></svg>
+
+                {% for node in tree_nodes %}
+                <div
+                    class="tree-node-abs queue-box
+                        {% if search_value is defined and search_value == node.value %}found-node{% endif %}
+                        {% if max_value is defined and max_value == node.value %}found-node{% endif %}"
+                    data-index="{{ node.index }}"
+                    data-parent="{{ node.parent }}"
+                    data-level="{{ node.level }}"
+                >
+                    {{ node.value }}
+                </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+        
+    <script>
+        const HEIGHT_PATH = {{ height_path|default([], true)|tojson }};
+    </script>
+
+    <script>
+        function layoutTree() {
+            const stage = document.getElementById("treeStage");
+            const svg = document.getElementById("treeSvg");
+            if (!stage || !svg) return;
+
+            const nodes = Array.from(stage.querySelectorAll(".tree-node-abs"));
+            if (!nodes.length) return;
+
+            const levelGap = 120;
+            const topPad = 40;
+            const nodeWidth = 60;
+            const nodeHeight = 40;
+
+            
+
+            // group nodes by level
+            const levels = {};
+            nodes.forEach(n => {
+                const lvl = +n.dataset.level;
+                if (!levels[lvl]) levels[lvl] = [];
+                levels[lvl].push(n);
+            });
+
+            // calculate needed container height
+            const maxLevel = Math.max(...nodes.map(n => +n.dataset.level));
+            const neededHeight = topPad + maxLevel * levelGap + nodeHeight + 50;
+            stage.style.height = neededHeight + "px";
+            
+            // assign x positions evenly across each level
+            Object.keys(levels).forEach(lvl => {
+                const levelNodes = levels[lvl];
+                const spacing = stage.clientWidth / (levelNodes.length + 1);
+                levelNodes.forEach((n, i) => {
+                    n.style.left = (spacing * (i + 1) - nodeWidth / 2) + "px"; // horizontal center
+                    n.style.top = (topPad + lvl * levelGap) + "px";
+                });
+            });
+
+            // clear previous SVG paths
+            svg.innerHTML = "";
+
+            // map nodes by index
+            const nodeMap = {};
+            nodes.forEach(n => { nodeMap[n.dataset.index] = n; });
+
+            // draw branches: bottom of parent → top of child
+            nodes.forEach(child => {
+                const parentIdx = child.dataset.parent;
+                if (!parentIdx) return;
+                const parent = nodeMap[parentIdx];
+                if (!parent) return;
+
+                const pCx = parent.offsetLeft + nodeWidth / 2;
+                const pCy = parent.offsetTop + nodeHeight; // bottom of parent
+                const cCx = child.offsetLeft + nodeWidth / 2;
+                const cCy = child.offsetTop; // top of child
+
+                const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                path.dataset.parentValue = parent.textContent.trim();
+                path.dataset.childValue  = child.textContent.trim();
+                path.setAttribute("d", `M ${pCx} ${pCy} L ${cCx} ${cCy}`);
+                path.setAttribute("class", "branch-line");
+                svg.appendChild(path);
+            });
+
+            // highlight path segments for height
+            if (HEIGHT_PATH && HEIGHT_PATH.length > 1) {
+
+                // Build pairs: (parent, child)
+                const pairs = [];
+                for (let i = 0; i < HEIGHT_PATH.length - 1; i++) {
+                    pairs.push({
+                        parent: HEIGHT_PATH[i],
+                        child: HEIGHT_PATH[i + 1]
+                    });
+                }
+
+                // For each SVG line, check if it matches one of the pairs
+                const lines = svg.querySelectorAll(".branch-line");
+
+                lines.forEach(line => {
+                    const p = line.dataset.parentValue;
+                    const c = line.dataset.childValue;
+
+                    const match = pairs.some(pair =>
+                        pair.parent == p && pair.child == c
+                    );
+
+                    if (match) {
+                        line.classList.add("highlight-edge");
+                    }
+                });
+            }
+
+
+
+
+        }
+
+        window.addEventListener("load", layoutTree);
+        window.addEventListener("resize", layoutTree);
+    </script>
+
+</div>
+
+{% endblock %}
