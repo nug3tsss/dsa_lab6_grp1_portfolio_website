@@ -156,6 +156,8 @@ def dequeue_visualizer():
 def binary_tree_visualizer():
     global binary_tree
 
+    tree_items = ""
+
     if request.method == "POST":
         value = request.form.get("value")
         target = request.form.get("target")
@@ -174,12 +176,22 @@ def binary_tree_visualizer():
     
     if "reset-tree" in request.form:
         binary_tree = BinaryTree()
+    
+    if "preorder" in request.form:
+        tree_items = binary_tree.preorder_traversal(binary_tree.root, "")
+
+    if "inorder" in request.form:
+        tree_items = binary_tree.inorder_traversal(binary_tree.root, "")
+        
+    if "postorder" in request.form:
+        tree_items = binary_tree.postorder_traversal(binary_tree.root, "")
 
     # use the new serializer that produces a list of dicts with index/parent/level/value
     tree_nodes = binary_tree.serialize_for_visualizer()
 
     return render_template(
         "binarytreevisualizer.html",
+        tree_items=tree_items.split(),
         tree_nodes=tree_nodes,
         tree_root=binary_tree.root,
         active_page="works"

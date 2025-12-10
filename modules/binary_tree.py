@@ -53,6 +53,22 @@ class BinaryTree:
             node_to_insert.right = target_node.right
             target_node.right = node_to_insert
 
+    def preorder_traversal(self, start, traversal):
+        """Traverse the tree in preorder (root, left, right)"""
+        if start:
+            traversal += (str(start.value) + " ")
+            traversal = self.preorder_traversal(start.left,traversal)
+            traversal = self.preorder_traversal(start.right,traversal)
+        return traversal    
+
+    def inorder_traversal(self, start, traversal):
+        """Traverse the tree in inorder (left, root, right)"""
+        if start:
+            traversal = self.inorder_traversal(start.left,traversal)
+            traversal += (str(start.value) + " ")
+            traversal = self.inorder_traversal(start.right,traversal)
+        return traversal
+
     def postorder_traversal(self, start, traversal):
         """Traverse the tree in postorder (left, right, root)"""
         if start:

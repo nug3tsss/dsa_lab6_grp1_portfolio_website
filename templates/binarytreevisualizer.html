@@ -21,11 +21,28 @@
         {% if tree_root %}
           <button type="submit" name="insert-left" class="btn-glow">Insert Left</button>
           <button type="submit" name="insert-right" class="btn-glow">Insert Right</button>
+        {% endif %}
+    </div>
+    <div class="button-container">
+        {% if tree_root %}
           <button type="submit" name="delete-node" class="btn-glow">Delete Node</button>
           <button type="submit" name="reset-tree" class="btn-glow">Reset Tree</button>
         {% endif %}
     </div>
+    <div class="button-container">
+        {% if tree_root %}
+          <button type="submit" name="preorder" class="btn-glow">View Preorder</button>
+          <button type="submit" name="inorder" class="btn-glow">View Inorder</button>
+          <button type="submit" name="postorder" class="btn-glow">View Postorder</button>
+        {% endif %}
+    </div>
 </form>
+
+<div class="queue-display">
+    {% if tree_items|length != 0 %}
+        <div class="empty-msg">{{ tree_items }}</div>
+    {% endif %}
+</div>
 
 <div class="queue-display">
     {% if tree_nodes|length == 0 %}
