@@ -7,6 +7,10 @@
 
 - Our group members and contact informations
 - Our programming works (so far)
+  - Queue visualizer
+  - DeQueue (Double-ended Queue) visualizer
+  - Binary Tree visualizer
+  - Binary Search Tree visualizer
 
 ---
 
@@ -14,6 +18,7 @@
 ```bash
 │
 ├── modules/
+│   ├── binary_search_tree.py
 │   ├── binary_tree.py
 │   ├── dequeue.py
 │   └── queue.py
@@ -33,9 +38,11 @@
 │       │   └── zy.jpg
 │       │
 │       └── background.mp4
+│       └── website-icon.png
 │
 ├── templates/
 │   ├── _base.html
+│   ├── binarysearchtreevisualizer.html
 │   ├── binarytreevisualizer.html
 │   ├── contacts.html
 │   ├── dequeuevisualizer.html
