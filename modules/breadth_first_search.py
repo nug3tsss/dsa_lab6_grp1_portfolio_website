@@ -1,0 +1,52 @@
+from collections import deque
+
+# BFS to find shortest path
+def bfs_shortest_path(adj, start, goal):
+    visited = set()
+    queue = deque([(start, [start])])
+
+    while queue:
+        current, path = queue.popleft()
+
+        if current == goal:
+            return path
+
+        if current not in visited:
+            visited.add(current)
+
+            for neighbor in adj.get(current, []):
+                if neighbor not in visited:
+                    queue.append((neighbor, path + [neighbor]))
+
+    return None
+
+adj = {}
+
+def addEdge(adj, u, v):
+    adj.setdefault(u, []).append(v)
+    adj.setdefault(v, []).append(u)
+
+lrt1 = [
+    "Fernando Poe Jr. (LRT-1)", "Balintawak (LRT-1)", "Monumento (LRT-1)", "5th Avenue (LRT-1)", "R. Papa (LRT-1)", "Abad Santos (LRT-1)", "Blumentritt (LRT-1)", "Tayuman (LRT-1)", "Bambang (LRT-1)", "Doroteo Jose (LRT-1)", "Carriedo (LRT-1)", "Central Terminal (LRT-1)", "United Nations (LRT-1)", "Pedro Gil (LRT-1)", "Quirino (LRT-1)", "Vito Cruz (LRT-1)", "Gil Puyat (LRT-1)", "Libertad (LRT-1)", "EDSA (LRT-1)", "Baclaran (LRT-1)", "Redemptorist–Aseana (LRT-1)", "MIA Road (LRT-1)", "Asia World–PITX (LRT-1)", "Ninoy Aquino Avenue (LRT-1)", "Dr. Santos (LRT-1)"
+]
+for i in range(len(lrt1) - 1):
+    addEdge(adj, lrt1[i], lrt1[i + 1])
+
+
+lrt2 = [
+    "Recto (LRT-2)", "Legarda (LRT-2)", "Pureza (LRT-2)", "V. Mapa (LRT-2)", "J. Ruiz (LRT-2)", "Gilmore (LRT-2)", "Betty Go-Belmonte (LRT-2)", "Araneta Center-Cubao (LRT-2)", "Anonas (LRT-2)", "Katipunan (LRT-2)", "Santolan (LRT-2)", "Marikina-Pasig (LRT-2)", "Antipolo (LRT-2)"
+]
+for i in range(len(lrt2) - 1):
+    addEdge(adj, lrt2[i], lrt2[i + 1])
+
+
+mrt3 = [
+    "North Avenue (MRT-3)", "Quezon Avenue (MRT-3)", "GMA-Kamuning (MRT-3)", "Araneta Center-Cubao (MRT-3)", "Santolan-Annapolis (MRT-3)", "Ortigas (MRT-3)", "Shaw Boulevard (MRT-3)", "Boni (MRT-3)", "Guadalupe (MRT-3)", "Buendia (MRT-3)", "Ayala (MRT-3)", "Magallanes (MRT-3)", "Taft Avenue (MRT-3)"
+]
+for i in range(len(mrt3) - 1):
+    addEdge(adj, mrt3[i], mrt3[i + 1])
+
+addEdge(adj, "Doroteo Jose (LRT-1)", "Recto (LRT-2)")
+addEdge(adj, "EDSA (LRT-1)", "Taft Avenue (MRT-3)")
+addEdge(adj, "Araneta Center-Cubao (LRT-2)", "Araneta Center-Cubao (MRT-3)")
+

@@ -1,0 +1,173 @@
+{% extends "_base.html" %}
+{% block title %}Train Line Navigator | Works{% endblock %}
+
+{% block content %}
+<div class="queue-wrapper">
+    <h2>Train Line Navigator</h2>
+    <p class="page-description">Find the shortest path between stations. This is the visualizer for Breadth-First Search.</p>
+
+    <form method="POST" class="queue-form" style="position: relative;">
+        <div class="input-container" style="position: relative;">
+            <!-- Start station -->
+            <input type="text" id="start-input" name="start" placeholder="Enter start station" autocomplete="off" value="{{ start }}" required>
+            <ul id="start-list" class="autocomplete-list-1"></ul>
+
+            <!-- Goal station -->
+            <input type="text" id="goal-input" name="goal" placeholder="Enter destination station" autocomplete="off" value="{{ goal }}" required>
+            <ul id="goal-list" class="autocomplete-list-2"></ul>
+        </div>
+        <div class="button-container">
+            <button type="submit" class="btn-glow">Find Path</button>
+        </div>
+    </form>
+
+    <div class="queue-display">
+        {% if path %}
+            {% for station in path %}
+                <div class="queue-box station-box line-glow" style="--line-color: {{ get_color(station) }};">
+                    {{ station }}
+                </div>
+                {% if not loop.last %}
+                    <span class="arrow">→</span>
+                {% endif %}
+            {% endfor %}
+        {% elif start or goal %}
+            <p>No path found between "{{ start }}" and "{{ goal }}".</p>
+        {% endif %}
+    </div>
+
+
+<style>
+.autocomplete-list-1 {
+    display: none; /* hidden by default */
+    position: absolute;
+    top: 100%; /* directly below input */
+    left: 24%;
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(8px);
+    list-style: none;
+    margin: 0;
+    padding: 5px 0;
+    width: 25%;
+    max-height: 200px;
+    overflow-y: auto;
+    border-radius: 10px;
+    border: 1px solid #00eaff;
+    box-shadow: 0 0 10px #00eaff70;
+    z-index: 10;
+}
+
+.autocomplete-list-2 {
+    display: none; /* hidden by default */
+    position: absolute;
+    top: 100%; /* directly below input */
+    left: 50%;
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(8px);
+    list-style: none;
+    margin: 0;
+    padding: 5px 0;
+    width: 25%;
+    max-height: 200px;
+    overflow-y: auto;
+    border-radius: 10px;
+    border: 1px solid #00eaff;
+    box-shadow: 0 0 10px #00eaff70;
+    z-index: 10;
+}
+
+.autocomplete-list-1 li, .autocomplete-list-2 li {
+    padding: 8px 12px;
+    cursor: pointer;
+    color: #000000;
+    transition: background 0.2s;
+}
+
+.autocomplete-list-1 li:hover, .autocomplete-list-2 li:hover {
+    background: #00eaff55;
+}
+
+/* TRAIN PATH DISPLAY */
+.queue-box.station-box {
+    background: rgba(0, 0, 0, 0.6); /* dark semi-transparent background */
+    padding: 12px 18px;
+    font-size: 1.2em;
+    font-weight: bold;
+    border-radius: 12px;
+    border: 2px solid #FFFFFF; /* border can stay neutral or white */
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 18px #00000088; /* default shadow */
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    animation: fadeInScale 0.35s ease;
+    color: #FFFFFF; /* text color */
+}
+
+/* Outer glow matching train line color */
+.queue-box.station-box.line-glow {
+    /* glow effect using box-shadow */
+    box-shadow: 0 0 18px var(--line-color);
+    border-color: var(--line-color);
+}
+
+/* Hover effect */
+.queue-box.station-box:hover {
+    transform: translateY(-6px) scale(1.12);
+    box-shadow: 0 0 28px var(--line-color);
+}
+</style>
+
+<script>
+const stations = [
+    {% for station in adj.keys() %}
+        "{{ station }}",
+    {% endfor %}
+];
+
+function autocomplete(inputId, listId) {
+    const input = document.getElementById(inputId);
+    const list = document.getElementById(listId);
+
+    input.addEventListener("input", () => {
+        const val = input.value.toLowerCase();
+        list.innerHTML = "";
+
+        if (!val) {
+            list.style.display = "none";  // hide if input is empty
+            return;
+        }
+
+        const filtered = stations.filter(station => station.toLowerCase().includes(val));
+        if (filtered.length === 0) {
+            list.style.display = "none"; // hide if no match
+            return;
+        }
+
+        list.style.display = "block"; // show the list
+        filtered.forEach(station => {
+            const item = document.createElement("li");
+            item.textContent = station;
+            item.addEventListener("click", () => {
+                input.value = station;
+                list.innerHTML = "";
+                list.style.display = "none";
+            });
+            list.appendChild(item);
+        });
+    });
+
+    // click outside to close
+    document.addEventListener("click", (e) => {
+        if (e.target !== input) {
+            list.innerHTML = "";
+            list.style.display = "none";
+        }
+    });
+}
+
+// initialize
+autocomplete("start-input", "start-list");
+autocomplete("goal-input", "goal-list");
+</script>
+
+</div>
+{% endblock %}
