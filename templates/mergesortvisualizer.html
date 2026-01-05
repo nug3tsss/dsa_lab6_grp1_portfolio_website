@@ -1,0 +1,29 @@
+{% extends "_base.html" %}
+{% block title %}Works - Merge Sort Visualizer{% endblock %}
+
+{% block content %}
+
+<div class="queue-wrapper">
+    <h2>Merge Sort</h2>
+<p class="page-description">Merge Sort is a divide-and-conquer algorithm that divides the input array into two halves, calls itself for the two halves, and then merges the two sorted halves</p>
+
+<form method="POST" class="queue-form">
+    <div class = "input-container">
+        <input type="text" name="value" placeholder="Enter value" required>
+    </div>
+    <div class="button-container">
+        <button type="submit" name="enter" class="btn-glow">Enter</button>
+        <button type="submit" name="sort" class="btn-glow"formnovalidate>Sort</button>
+    </div>
+</form>
+
+
+<div class="queue-display">
+    {% if items|length == 0 %}
+        <div class="empty-msg">Array is empty</div>
+    {% else %}
+        {{ items }}
+    {% endif %}
+</div>
+
+{% endblock %}

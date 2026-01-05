@@ -1,11 +1,13 @@
 from flask import Flask, render_template, request, redirect, url_for
 import os
+import ast
 from collections import deque
 from modules.queue import Queue
 from modules.dequeue import DeQueue
 from modules.binary_tree import BinaryTree
 from modules.binary_search_tree import BinarySearchTree, Node
 from modules.breadth_first_search import bfs_shortest_path, adj
+from modules.merge_sort import MergeSort
 
 app = Flask(__name__)
 
@@ -327,6 +329,23 @@ def bfs_page():
 
     return render_template("breadthfirst.html", path=path, start=start, goal=goal, get_color=get_line_color, adj=adj)
 
+# Merge Sort Visualizer (WIP)
+merge_sort_array = []
+@app.route('/works/merge-sort-visualizer', methods=['GET', 'POST'])
+def merge_sort_visualizer():
+    if request.method == "POST":
+        value = request.form.get("value")
+
+        if "enter" in request.form:
+            merge_sort_array.append(value)
+        elif "sort" in request.form:
+            MergeSort(merge_sort_array)
+
+    return render_template(
+        "mergesortvisualizer.html",
+        items=merge_sort_array,
+        active_page="works"
+    )
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
