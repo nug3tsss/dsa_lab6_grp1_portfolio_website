@@ -1,9 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for
 import os
+from collections import deque
 from modules.queue import Queue
 from modules.dequeue import DeQueue
 from modules.binary_tree import BinaryTree
 from modules.binary_search_tree import BinarySearchTree, Node
+from modules.breadth_first_search import bfs_shortest_path, adj
 
 app = Flask(__name__)
 
@@ -20,8 +22,9 @@ def home_redirect():
 @app.route('/home')
 def index():
     index_data = {
-        "message": "GROUP 11",
-        "message_1": "Hello everyone we are the Group 11 and this is our Group Portfolio project in DSA."
+        "message": "SEVEN11",
+        "message_1": "SEVEN members of Group ONE, united as ONE.",
+        "message_2": "Welcome to the official page of Group ONE's programming works."
     }
     return render_template('home.html', index=index_data, active_page='home')
 
@@ -297,6 +300,33 @@ def bst_visualizer():
         height_path=height_path,
         active_page="works"
     )
+
+### Breadth-First Search
+@app.route('/works/bfs', methods=['GET', 'POST'])
+def bfs_page():
+    global bfs_shortest_path
+    # line colors
+    line_colors = {
+        "LRT-1": "#00FF00",
+        "LRT-2": "#1E90FF",
+        "MRT-3": "#FFFF00"
+    }
+
+    def get_line_color(station):
+        for line in line_colors:
+            if line in station:
+                return line_colors[line]
+        return "#FFFFFF"
+
+    path = []
+    start = goal = ""
+    if request.method == "POST":
+        start = request.form.get("start")
+        goal = request.form.get("goal")
+        path = bfs_shortest_path(adj, start, goal)
+
+    return render_template("breadthfirst.html", path=path, start=start, goal=goal, get_color=get_line_color, adj=adj)
+
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
