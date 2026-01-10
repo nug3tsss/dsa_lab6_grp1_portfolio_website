@@ -8,6 +8,8 @@ from modules.binary_tree import BinaryTree
 from modules.binary_search_tree import BinarySearchTree, Node
 from modules.breadth_first_search import bfs_shortest_path, adj
 from modules.merge_sort import MergeSort
+from modules.selection_sort import SelectionSort
+
 
 app = Flask(__name__)
 
@@ -344,6 +346,26 @@ def merge_sort_visualizer():
     return render_template(
         "mergesortvisualizer.html",
         items=merge_sort_array,
+        active_page="works"
+    )
+
+# Selection Sort Visualizer
+selection_sort_array = []
+
+@app.route('/works/selection-sort-visualizer', methods=['GET', 'POST'])
+def selection_sort_visualizer():
+    if request.method == "POST":
+        value = request.form.get("value")
+
+        if "enter" in request.form:
+            if value:
+                selection_sort_array.append(int(value))
+        elif "sort" in request.form:
+            SelectionSort(selection_sort_array)
+
+    return render_template(
+        "selectionsortvisualizer.html",
+        items=selection_sort_array,
         active_page="works"
     )
 
