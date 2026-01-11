@@ -9,7 +9,7 @@ from modules.binary_search_tree import BinarySearchTree, Node
 from modules.breadth_first_search import bfs_shortest_path, adj
 from modules.merge_sort import MergeSort
 from modules.selection_sort import SelectionSort
-
+from modules.insertion_sort import insertion_sort
 
 app = Flask(__name__)
 
@@ -366,6 +366,31 @@ def selection_sort_visualizer():
     return render_template(
         "selectionsortvisualizer.html",
         items=selection_sort_array,
+        active_page="works"
+    )
+
+# Insertion Sort Visualizer
+@app.route("/works/insertion-sort", methods=["GET", "POST"])
+def insertion_sort_page():
+    sorted_list = None
+    original_list = None
+    error = None
+
+    if request.method == "POST":
+        user_input = request.form.get("numbers")
+
+        try:
+            # Convert user input into list of integers
+            original_list = [int(x.strip()) for x in user_input.split(",")]
+            sorted_list = insertion_sort(original_list.copy())
+        except ValueError:
+            error = "Please enter only numbers separated by commas."
+
+    return render_template(
+        "insertionsortvisualizer.html",
+        original_list=original_list,
+        sorted_list=sorted_list,
+        error=error,
         active_page="works"
     )
 
