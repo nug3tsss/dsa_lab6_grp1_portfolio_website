@@ -397,3 +397,21 @@ def insertion_sort_page():
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port, debug=True)
+
+# Quick Sort Visualizer
+quick_sort_array = []
+@app.route('/works/quick-sort-visualizer', methods=['GET', 'POST'])
+def quick_sort_visualizer():
+    if request.method == "POST":
+        value = request.form.get("value")
+
+        if "enter" in request.form:
+            quick_sort_array.append(value)
+        elif "sort" in request.form:
+            QuickSort(quick_sort_array)
+
+    return render_template(
+        "quicksortvisualizer.html",
+        items=quick_sort_array,
+        active_page="works"
+    )
