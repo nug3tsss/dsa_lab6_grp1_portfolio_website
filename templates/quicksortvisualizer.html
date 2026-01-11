@@ -1,0 +1,29 @@
+{% extends "_base.html" %}
+{% block title %}Works - Quick Sort Visualizer{% endblock %}
+
+{% block content %}
+<div class="queue-wrapper">
+    <h2>Quick Sort</h2>
+    <p class="page-description">
+        Quick Sort is a Divide and Conquer algorithm. It picks an element as a pivot and partitions the array by placing smaller elements to the left and larger to the right.
+    </p>
+
+    <form method="POST" class="queue-form">
+        <div class="input-container">
+            <input type="number" name="value" placeholder="Enter value" required>
+        </div>
+        <div class="button-container">
+            <button type="submit" name="enter" class="btn-glow">Enter</button>
+            <button type="submit" name="sort" class="btn-glow" formnovalidate>Sort</button>
+        </div>
+    </form>
+
+    <div class="queue-display">
+        {% if items|length == 0 %}
+            <div class="empty-msg">Array is empty</div>
+        {% else %}
+            [ {% for item in items %}{{ item }}{% if not loop.last %}, {% endif %}{% endfor %} ]
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
