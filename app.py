@@ -10,6 +10,7 @@ from modules.breadth_first_search import bfs_shortest_path, adj
 from modules.merge_sort import MergeSort
 from modules.selection_sort import SelectionSort
 from modules.insertion_sort import insertion_sort
+from modules.quick_sort import QuickSort
 
 app = Flask(__name__)
 
@@ -394,10 +395,6 @@ def insertion_sort_page():
         active_page="works"
     )
 
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port, debug=True)
-
 # Quick Sort Visualizer
 quick_sort_array = []
 @app.route('/works/quick-sort-visualizer', methods=['GET', 'POST'])
@@ -408,10 +405,17 @@ def quick_sort_visualizer():
         if "enter" in request.form:
             quick_sort_array.append(value)
         elif "sort" in request.form:
-            QuickSort(quick_sort_array)
+            sorter = QuickSort(quick_sort_array)
+            quick_sort_array[:] = sorter.sorted_array
 
     return render_template(
         "quicksortvisualizer.html",
         items=quick_sort_array,
         active_page="works"
     )
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port, debug=True)
+
+
