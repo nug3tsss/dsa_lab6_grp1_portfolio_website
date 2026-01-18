@@ -7,9 +7,9 @@ from modules.dequeue import DeQueue
 from modules.binary_tree import BinaryTree
 from modules.binary_search_tree import BinarySearchTree, Node
 from modules.breadth_first_search import bfs_shortest_path, adj
-from modules.selection_sort import SelectionSort
+from modules.selection_sort import selection_sort
 from modules.insertion_sort import insertion_sort
-from modules.quick_sort import QuickSort
+from modules.quick_sort import quick_sort
 from modules.bubble_sort import bubble_sort
 from modules.merge_sort import merge_sort
 
@@ -363,66 +363,50 @@ def merge_sort_visualizer():
     return render_template("mergesortvisualizer.html", steps=steps)
 
 # Selection Sort Visualizer
-selection_sort_array = []
-
 @app.route('/works/sorting-algorithms/selection-sort-visualizer', methods=['GET', 'POST'])
 def selection_sort_visualizer():
+    steps = None
     if request.method == "POST":
-        value = request.form.get("value")
-
-        if "enter" in request.form:
-            if value:
-                selection_sort_array.append(int(value))
-        elif "sort" in request.form:
-            SelectionSort(selection_sort_array)
-
+        data = request.form.get("array")
+        algorithm = request.form.get("algorithm")
+        if data and algorithm == "selection":
+            arr = list(map(int, data.split(",")))
+            steps = selection_sort(arr)
     return render_template(
         "selectionsortvisualizer.html",
-        items=selection_sort_array,
+        steps=steps,
         active_page="works"
     )
 
 # Insertion Sort Visualizer
 @app.route("/works/sorting-algorithms/insertion-sort-visualizer", methods=["GET", "POST"])
 def insertion_sort_page():
-    sorted_list = None
-    original_list = None
-    error = None
-
+    steps = None
     if request.method == "POST":
-        user_input = request.form.get("numbers")
-
-        try:
-            # Convert user input into list of integers
-            original_list = [int(x.strip()) for x in user_input.split(",")]
-            sorted_list = insertion_sort(original_list.copy())
-        except ValueError:
-            error = "Please enter only numbers separated by commas."
-
+        data = request.form.get("array")
+        algorithm = request.form.get("algorithm")
+        if data and algorithm == "insertion":
+            arr = list(map(int, data.split(",")))
+            steps = insertion_sort(arr)
     return render_template(
         "insertionsortvisualizer.html",
-        original_list=original_list,
-        sorted_list=sorted_list,
-        error=error,
+        steps=steps,
         active_page="works"
     )
 
 # Quick Sort Visualizer
-quick_sort_array = []
 @app.route('/works/sorting-algorithms/quick-sort-visualizer', methods=['GET', 'POST'])
 def quick_sort_visualizer():
+    steps = None
     if request.method == "POST":
-        value = request.form.get("value")
-
-        if "enter" in request.form:
-            quick_sort_array.append(value)
-        elif "sort" in request.form:
-            sorter = QuickSort(quick_sort_array)
-            quick_sort_array[:] = sorter.sorted_array
-
+        data = request.form.get("array")
+        algorithm = request.form.get("algorithm")
+        if data and algorithm == "quick":
+            arr = list(map(int, data.split(",")))
+            steps = quick_sort(arr)
     return render_template(
         "quicksortvisualizer.html",
-        items=quick_sort_array,
+        steps=steps,
         active_page="works"
     )
 

@@ -1,17 +1,57 @@
-class SelectionSort:
-    def __init__(self, array):
-        self.array = array
-        self.selection_sort(self.array)
+def selection_sort(arr):
+    """Selection sort that tracks steps for visualization"""
+    n = len(arr)
+    a = arr.copy()
+    steps = []
+    comparisons = [0]
+    swaps = [0]
 
-    def selection_sort(self, array):
-        n = len(array)
+    for i in range(n):
+        min_index = i
 
-        for i in range(n):
-            min_index = i
-            for j in range(i + 1, n):
-                if array[j] < array[min_index]:
-                    min_index = j
+        # Record initial state for this pass
+        steps.append(
+            {
+                "arr": a.copy(),
+                "active": [i],
+                "comparisons": comparisons[0],
+                "swaps": swaps[0],
+            }
+        )
 
-            array[i], array[min_index] = array[min_index], array[i]
+        for j in range(i + 1, n):
+            comparisons[0] += 1
 
-        return array
+            # Record comparison step
+            steps.append(
+                {
+                    "arr": a.copy(),
+                    "active": [min_index, j],
+                    "comparisons": comparisons[0],
+                    "swaps": swaps[0],
+                }
+            )
+
+            if a[j] < a[min_index]:
+                min_index = j
+
+        # Swap if needed
+        if min_index != i:
+            a[i], a[min_index] = a[min_index], a[i]
+            swaps[0] += 1
+
+            # Record swap step
+            steps.append(
+                {
+                    "arr": a.copy(),
+                    "active": [i, min_index],
+                    "comparisons": comparisons[0],
+                    "swaps": swaps[0],
+                }
+            )
+
+    return (
+        steps
+        if steps
+        else [{"arr": a, "active": [], "comparisons": 0, "swaps": 0}]
+    )
