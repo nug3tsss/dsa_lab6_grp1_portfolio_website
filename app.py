@@ -332,9 +332,26 @@ def bfs_page():
 
     return render_template("breadthfirst.html", path=path, start=start, goal=goal, get_color=get_line_color, adj=adj)
 
+# Sorting Algorithms Section
+@app.route('/works/sorting-algorithms')
+def sorting_algorithm():
+    return render_template('sortingalgorithms.html', active_page='sorting-algorithms')
+
+# Bubble Sort Visualizer
+@app.route("/works/sorting-algorithms/bubble-sort-visualizer", methods=["GET", "POST"])
+def bubble_sort_page():
+    steps = None
+    if request.method == "POST":
+        data = request.form.get("array")
+        algorithm = request.form.get("algorithm")
+        if data and algorithm == "bubble":
+            arr = list(map(int, data.split(",")))
+            steps = bubble_sort(arr)
+    return render_template("bubblesortvisualizer.html", steps=steps)
+
 # Merge Sort Visualizer
 merge_sort_array = []
-@app.route('/works/merge-sort-visualizer', methods=['GET', 'POST'])
+@app.route('/works/sorting-algorithms/merge-sort-visualizer', methods=['GET', 'POST'])
 def merge_sort_visualizer():
     if request.method == "POST":
         value = request.form.get("value")
@@ -353,7 +370,7 @@ def merge_sort_visualizer():
 # Selection Sort Visualizer
 selection_sort_array = []
 
-@app.route('/works/selection-sort-visualizer', methods=['GET', 'POST'])
+@app.route('/works/sorting-algorithms/selection-sort-visualizer', methods=['GET', 'POST'])
 def selection_sort_visualizer():
     if request.method == "POST":
         value = request.form.get("value")
@@ -371,7 +388,7 @@ def selection_sort_visualizer():
     )
 
 # Insertion Sort Visualizer
-@app.route("/works/insertion-sort-visualizer", methods=["GET", "POST"])
+@app.route("/works/sorting-algorithms/insertion-sort-visualizer", methods=["GET", "POST"])
 def insertion_sort_page():
     sorted_list = None
     original_list = None
@@ -397,7 +414,7 @@ def insertion_sort_page():
 
 # Quick Sort Visualizer
 quick_sort_array = []
-@app.route('/works/quick-sort-visualizer', methods=['GET', 'POST'])
+@app.route('/works/sorting-algorithms/quick-sort-visualizer', methods=['GET', 'POST'])
 def quick_sort_visualizer():
     if request.method == "POST":
         value = request.form.get("value")

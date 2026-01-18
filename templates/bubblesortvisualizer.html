@@ -1,0 +1,161 @@
+{% extends "_base.html" %}
+{% block title %}Bubble Sort Visualizer{% endblock %}
+
+{% block content %}
+<body>
+<div class="center-wrapper">
+    <h1>Bubble Sorting Visualizer</h1>
+
+    <form id="sort-form" method="POST" action="/works/sorting_algorithms/bubble_sort">
+        <input type="hidden" name="algorithm" value="bubble">
+        <input type="text" name="array" id="array-input" hidden>
+    </form>
+
+    <div class="input-row" style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+        <input type="number" id="num-input" placeholder="Enter a number">
+        <button type="button" id="enter-btn">Enter</button>
+        <button type="button" id="sort-btn">Sort</button>
+        <button type="button" id="clear-btn">Clear</button>
+
+        <div id="random-container">
+            <button type="button" id="random-btn">Generate Random</button>
+        </div>
+    </div>
+
+    <div class="input-box" style="padding: 10px; width: 400px; min-height: 50px; border: 2px solid #000000; border-radius: 10px; margin-bottom: 20px;">
+        <div id="number-list">Numbers: </div>
+    </div>
+
+<div class="stats-box" style="margin-bottom: 15px;">
+    <p>Time: <span id="timer-display">0.0</span> s</p>
+    <p>Comparisons: <span id="comparison-display">{{ steps[-1].comparisons if steps else 0 }}</span></p>
+    <p>Swaps: <span id="swap-display">{{ steps[-1].swaps if steps else 0 }}</span></p>
+</div>
+
+    <div class="demo-box" id="bar-container" style="display:flex; align-items:flex-end; gap:2px; height:300px; border:1px solid #ccc; padding:10px;"></div>
+
+</div>
+
+<script>
+const numbers = [];
+const input = document.getElementById("num-input");
+const listContainer = document.getElementById("number-list");
+const container = document.getElementById("bar-container");
+const randomContainer = document.getElementById("random-container");
+
+
+function renderNumberList() {
+    listContainer.textContent = "Numbers: " + numbers.join(", ");
+}
+
+document.getElementById("enter-btn").addEventListener("click", () => {
+    const val = parseInt(input.value);
+    if (!isNaN(val)) {
+        numbers.push(val);
+        input.value = "";
+        renderNumberList();
+    }
+});
+
+function setupRandomButton() {
+    const randomBtn = document.getElementById("random-btn");
+    if (!randomBtn) return;
+    randomBtn.addEventListener("click", () => {
+        randomContainer.innerHTML = `
+            <input type="number" id="random-count" placeholder="How many numbers?" style="width:150px;height:36px;">
+            <button type="button" id="random-confirm">Generate</button>
+        `;
+        document.getElementById("random-confirm").addEventListener("click", () => {
+            const count = parseInt(document.getElementById("random-count").value);
+            if (isNaN(count) || count <= 0) { alert("Invalid number"); return; }
+            numbers.length = 0;
+            for (let i = 0; i < count; i++) numbers.push(Math.floor(Math.random() * 100) + 1);
+            renderNumberList();
+            container.innerHTML = "";
+            randomContainer.innerHTML = `<button type="button" id="random-btn">Generate Random</button>`;
+            setupRandomButton();
+        });
+    });
+}
+setupRandomButton();
+
+document.getElementById("sort-btn").addEventListener("click", () => {
+    if (numbers.length === 0) return;
+    document.getElementById("array-input").value = numbers.join(",");
+    document.getElementById("sort-form").submit();
+});
+
+
+document.getElementById("clear-btn").addEventListener("click", () => {
+    numbers.length = 0;
+    listContainer.textContent = "Numbers: ";
+    container.innerHTML = "";
+    input.value = "";
+    randomContainer.innerHTML = `<button type="button" id="random-btn">Generate Random</button>`;
+    setupRandomButton();
+});
+
+
+{% if steps %}
+const steps = {{ steps|tojson }};
+let i = 0;
+
+function animateStep(step) {
+    container.innerHTML = "";
+    const maxVal = Math.max(...step.arr);
+    const containerWidth = container.clientWidth;
+    const maxGap = 5;
+    const barWidth = Math.floor((containerWidth - (step.arr.length - 1) * maxGap) / step.arr.length);
+    const gap = Math.min(maxGap, (containerWidth - barWidth * step.arr.length) / (step.arr.length - 1));
+
+    step.arr.forEach((value, idx) => {
+        const bar = document.createElement("div");
+        bar.style.height = (value / maxVal * 280) + "px";
+        bar.style.width = barWidth + "px";
+        bar.style.backgroundColor = step.active.includes(idx) ? "red" : "rgba(24,144,192,0.8)";
+        
+        bar.style.display = "flex";
+        bar.style.alignItems = "flex-end";
+        bar.style.justifyContent = "center";
+        bar.style.color = "#fff";
+        bar.style.fontWeight = "bold";
+        bar.style.fontSize = "16px";
+
+        bar.textContent = value;
+        bar.style.marginRight = idx === step.arr.length - 1 ? "0px" : gap + "px";
+
+        container.appendChild(bar);
+    });
+
+    document.getElementById("comparison-display").textContent = step.comparisons ?? 0;
+    document.getElementById("swap-display").textContent = step.swaps ?? 0;
+}
+
+function animateSteps() {
+    if (i === 0) {
+        const startTime = Date.now();
+        timerInterval = setInterval(() => {
+            const elapsed = ((Date.now() - startTime) / 1000).toFixed(4);
+            document.getElementById("timer-display").textContent = elapsed;
+        }, 10);
+    }
+
+    if (i >= steps.length) {
+        clearInterval(timerInterval);
+
+        const bars = container.children;
+        for (let bar of bars) {
+            bar.style.backgroundColor = "rgba(24,144,192,0.8)";
+        }
+        return;
+    }
+
+    animateStep(steps[i]);
+    i++;
+    setTimeout(animateSteps, 100);
+}
+
+animateSteps();
+{% endif %}
+</script>
+{% endblock %}
