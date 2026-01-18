@@ -1,52 +1,70 @@
-class MergeSort():
-    def __init__(self, array):
-        self.array = array
-        self.merge_sort(self.array)
+def merge_sort(array):
+    """Merge sort that tracks steps for visualization"""
+    n = len(array)
+    a = array.copy()
+    steps = []
+    comparisons = [0]
+    swaps = [0]
     
-    def merge_sort(self, array):
-        array_length = len(array)
-
-        if array_length <= 1:
-            # Stop recursion
-            return array
+    def merge_sort_helper(arr, left, right):
+        if left < right:
+            mid = (left + right) // 2
+            merge_sort_helper(arr, left, mid)
+            merge_sort_helper(arr, mid + 1, right)
+            merge(arr, left, mid, right)
+    
+    def merge(arr, left, mid, right):
+        left_arr = arr[left:mid+1]
+        right_arr = arr[mid+1:right+1]
         
-        middle_array = array_length // 2
-        left_array = array[:middle_array]
-        right_array = array[middle_array:]
+        i = j = 0
+        k = left
         
-        self.merge_sort(left_array)
-        self.merge_sort(right_array)
-        self.merge(left_array, right_array, array)
-
-    def merge(self, left_array, right_array, array):
-        left_size = len(left_array)
-        right_size = len(right_array)
-
-        # Indices
-        i = 0
-        l = 0
-        r = 0
-
-        while l < left_size and r < right_size:
-            if left_array[l] < right_array[r]:
-                array[i] = left_array[l]
+        while i < len(left_arr) and j < len(right_arr):
+            comparisons[0] += 1
+            
+            if left_arr[i] <= right_arr[j]:
+                arr[k] = left_arr[i]
                 i += 1
-                l += 1
             else:
-                array[i] = right_array[r]
-                i += 1
-                r += 1
+                arr[k] = right_arr[j]
+                j += 1
+            
+            swaps[0] += 1
+            k += 1
+            
+            steps.append({
+                'arr': arr.copy(),
+                'active': [k-1],
+                'comparisons': comparisons[0],
+                'swaps': swaps[0]
+            })
         
-        while l < left_size:
-            array[i] = left_array[l]
+        while i < len(left_arr):
+            arr[k] = left_arr[i]
             i += 1
-            l += 1
+            k += 1
+            swaps[0] += 1
+            
+            steps.append({
+                'arr': arr.copy(),
+                'active': [k-1],
+                'comparisons': comparisons[0],
+                'swaps': swaps[0]
+            })
         
-        while r < right_size:
-            array[i] = right_array[r]
-            i += 1
-            r += 1
-
-array = [1, 7, 3, 6, 2, 8]
-MergeSort(array)
-print(array)
+        while j < len(right_arr):
+            arr[k] = right_arr[j]
+            j += 1
+            k += 1
+            swaps[0] += 1
+            
+            steps.append({
+                'arr': arr.copy(),
+                'active': [k-1],
+                'comparisons': comparisons[0],
+                'swaps': swaps[0]
+            })
+    
+    merge_sort_helper(a, 0, n - 1)
+    return steps if steps else [{'arr': a, 'active': [], 'comparisons': 0, 'swaps': 0}]

@@ -7,10 +7,11 @@ from modules.dequeue import DeQueue
 from modules.binary_tree import BinaryTree
 from modules.binary_search_tree import BinarySearchTree, Node
 from modules.breadth_first_search import bfs_shortest_path, adj
-from modules.merge_sort import MergeSort
 from modules.selection_sort import SelectionSort
 from modules.insertion_sort import insertion_sort
 from modules.quick_sort import QuickSort
+from modules.bubble_sort import bubble_sort
+from modules.merge_sort import merge_sort
 
 app = Flask(__name__)
 
@@ -350,22 +351,16 @@ def bubble_sort_page():
     return render_template("bubblesortvisualizer.html", steps=steps)
 
 # Merge Sort Visualizer
-merge_sort_array = []
 @app.route('/works/sorting-algorithms/merge-sort-visualizer', methods=['GET', 'POST'])
 def merge_sort_visualizer():
+    steps = None
     if request.method == "POST":
-        value = request.form.get("value")
-
-        if "enter" in request.form:
-            merge_sort_array.append(value)
-        elif "sort" in request.form:
-            MergeSort(merge_sort_array)
-
-    return render_template(
-        "mergesortvisualizer.html",
-        items=merge_sort_array,
-        active_page="works"
-    )
+        data = request.form.get("array")
+        algorithm = request.form.get("algorithm")
+        if data and algorithm == "merge":
+            arr = list(map(int, data.split(",")))
+            steps = merge_sort(arr)
+    return render_template("mergesortvisualizer.html", steps=steps)
 
 # Selection Sort Visualizer
 selection_sort_array = []
