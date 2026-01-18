@@ -332,7 +332,7 @@ def bfs_page():
 
     return render_template("breadthfirst.html", path=path, start=start, goal=goal, get_color=get_line_color, adj=adj)
 
-# Merge Sort Visualizer (WIP)
+# Merge Sort Visualizer
 merge_sort_array = []
 @app.route('/works/merge-sort-visualizer', methods=['GET', 'POST'])
 def merge_sort_visualizer():
@@ -371,7 +371,7 @@ def selection_sort_visualizer():
     )
 
 # Insertion Sort Visualizer
-@app.route("/works/insertion-sort", methods=["GET", "POST"])
+@app.route("/works/insertion-sort-visualizer", methods=["GET", "POST"])
 def insertion_sort_page():
     sorted_list = None
     original_list = None
